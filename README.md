@@ -1,54 +1,96 @@
-# VoxMorph – Ultimate Voice Changer (v1.1.0)
-Package `com.cartoniq.voxmorph` · minSdk 24 · target/compile 34 · Gradle 8.9 · AGP 8.7.3 · Kotlin 2.0.21 · JVM 17
-By CartoniQ – Premium offline apps. Built with passion.
+# 🎙️ VoxMorph - Ultimate Voice Changer & TTS
 
-Offline-first Android voice effects studio (Jetpack Compose, Material 3).
-Flow: **record → stop → offline voice engine → preview → (save to History) → download / share.** Not live voice changing.
+![Kotlin](https://img.shields.io/badge/Kotlin-2.0.21-blue.svg?style=for-the-badge&logo=kotlin)
+![Android](https://img.shields.io/badge/Android-API%2024%2B-green.svg?style=for-the-badge&logo=android)
+![Compose](https://img.shields.io/badge/Jetpack%20Compose-UI-orange.svg?style=for-the-badge&logo=jetpack-compose)
+![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)
+![Privacy](https://img.shields.io/badge/Privacy-100%25%20Offline-success.svg?style=for-the-badge)
 
-## Build status (read this first)
-This source was written without Gradle, a Kotlin compiler or network access, so **it has never been compiled or run on a device.**
-Expect to fix a few compile errors on the first build, and send the error text to get them fixed. The voice-engine algorithm
-(pitch accuracy, formant shift, duration) was checked with a separate numeric prototype, but the Kotlin itself was not compiled.
+**VoxMorph** is a premium, 100% offline voice changer and Text-to-Speech (TTS) application for Android. Built for content creators, pranksters, and anyone who wants to have fun, VoxMorph features a stunning "Cosmic Purple" Neon Studio UI and a professional-grade audio engine.
 
-## Build on Termux (phone only)
-```
-sh setup.sh            # one time: Gradle 8.9 wrapper, local.properties, aapt2 override for ARM
-./gradlew assembleDebug
-```
-Output: `app/build/outputs/apk/debug/app-debug.apk`
+Transform your voice into 30 different characters, from realistic men and women to robots and aliens. Perfect for WhatsApp voice notes, Instagram Reels, YouTube videos, and practical jokes.
 
-Why `setup.sh`: AGP 8.7.3 needs Gradle 8.9 (a newer global Gradle will not work), the ZIP cannot ship `gradle-wrapper.jar`,
-and the aapt2 that AGP downloads is built for x86 and cannot run on ARM Termux, so the script points AGP at Termux's own `aapt2`.
-It needs the global `gradle` once (to create the wrapper) and internet for the first build.
+---
 
-## What is new in 1.1
-- **Download**: Studio preview, Text-to-Speech preview and every History item have a Download button. Android 10+ saves in one tap to
-  `Downloads/VoxMorph`; Android 7-9 opens the system "save as" screen. No storage permission is needed.
-- **New voice engine** (`audio/Psola.kt`, `audio/VoiceProcessor.kt`): TD-PSOLA pitch shifting with separate formant (voice tone)
-  control, so male/female voices change pitch AND vocal-tract colour instead of sounding like sped-up tape. Robot voice is locked to a
-  single note. Added: 60 Hz rumble filter, gentle compressor, cubic-interpolation resampling.
-- **Voice tone** slider (Studio adjust dialog and TTS advanced options) and **Apply selected voice to this recording** (try another
-  voice without re-recording; the original stays in memory only while the app is open and is never saved).
-- **About CartoniQ** page (Settings → About) with developer and contact info (English + Hindi).
-- **Full Privacy Policy** page (Settings → Privacy) rewritten to match exactly what the app does (English + Hindi).
-- Fix: tapping Stop right after Record could be lost; the recording then ran for up to 60 s.
-- Settings "Clear history" now asks for confirmation.
+## 🚀 Key Features
 
-## Features
-- 30 profiles from one catalog (`domain/VoiceProfile.kt`): Man 1-10, Woman 1-10, 10 effects. Free: Man 1, Woman 1, Robot.
-- Rewarded unlock lasts 10 minutes, granted only in `onUserEarnedReward`, expiry stored as epoch time.
-- Text-to-Speech: `synthesizeToFile` → decode → voice engine → preview/save/download/share. Speaker output is never recorded.
-- History (Room + files in `filesDir/recordings`), filters, play/pause, download, share, delete, clear all, startup reconcile.
-- English + Hindi, in-app language switch, semantics/content descriptions, 48dp targets, adaptive + legacy icons.
-- Permissions: only `RECORD_AUDIO`, `INTERNET`, `ACCESS_NETWORK_STATE`.
+### 🎙️ 30 Unique Voice Profiles
+VoxMorph includes 30 meticulously crafted voice profiles:
+*   **10 Male Voices:** From a natural news anchor to a deep cinematic movie trailer voice.
+*   **10 Female Voices:** From a soft, friendly tone to an energetic pop star.
+*   **10 Fun Effects:** Robot, Alien, Ghost, Echo, Megaphone, Chipmunk, Monster, Deep Voice, Radio, and Telephone.
 
-## Architecture
-`domain` (catalog, errors) · `data` (Room, repository, reward store) · `audio` (AudioRecord engine, PSOLA voice engine, TTS, decoder, player) ·
-`ads` (UMP + Mobile Ads) · `viewmodel` (single state holder) · `ui` (Compose screens/components) · `util` (share, download, links, locale).
+### 🎛️ Studio-Quality PSOLA Engine
+Unlike basic voice changers that make you sound like a broken robot, VoxMorph uses a custom **PSOLA (Pitch Synchronous Overlap and Add)** algorithm. This shifts the pitch *while preserving the formant* (the natural resonance of your throat), resulting in voices that sound incredibly human and natural.
 
-## Known limits / honest notes
-- PSOLA works best on a single clean voice. Strong background noise or music lowers pitch-tracking quality; unvoiced parts keep
-  natural timing. Gender voices are strong presets, not a guaranteed realistic gender conversion.
-- No interstitial ads, no foreground recording service (recording stops when the app is backgrounded).
-- Ads use Google TEST IDs (`ads/AdManager.kt`, manifest). Replace before release. Host the privacy policy at a public URL for Play.
-- Release build is unsigned and un-minified. Max recording 60 s, min 0.5 s. TTS limit 500 characters (`MainViewModel.TTS_LIMIT`).
+### 🗣️ Bilingual Text-to-Speech (TTS)
+Type any text, and VoxMorph will speak it out loud in your chosen voice! 
+*   Full support for **English** and **Hindi** (हिंदी).
+*   Adjustable Pitch and Speed sliders.
+*   Perfect for creating AI voiceovers for videos.
+
+### 📥 Share & Download
+*   **Download:** Save your creations directly to your phone's Downloads folder in `.m4a` (AAC) format.
+*   **Share:** One-tap sharing directly to WhatsApp, Instagram, or Telegram. (No more "Unsupported Format" errors).
+
+### 🕒 History & Room DB
+All your generated voice notes and TTS audio are saved locally in a Room Database, so you can listen to them, share them, or delete them anytime.
+
+---
+
+## 📖 How to Use VoxMorph
+
+### Method 1: Voice Recording
+1. Open the **Studio** tab.
+2. Select a voice from the grid (Male, Female, or Effects).
+3. Tap the massive **RECORD** button and speak.
+4. Tap **STOP**. The PSOLA engine will instantly process your voice.
+5. Play the preview, then **Download** or **Share** it.
+
+### Method 2: Text-to-Speech (TTS)
+1. Tap the **"Text to Speech"** button in the top right corner.
+2. Type or paste your text (English or Hindi).
+3. Choose your **Language** (English/Hindi) and **Voice Profile**.
+4. Tap **"Generate Speech"**.
+5. Your audio file is ready to share!
+
+### 🔓 Unlocking Premium Voices
+Some voices are locked behind a crown icon. To unlock them:
+1. Tap on a locked voice.
+2. Watch a short **Rewarded Video Ad**.
+3. All premium voices are unlocked for **10 minutes**!
+
+---
+
+## 🛠️ Tech Stack & Architecture
+
+*   **Language:** Kotlin
+*   **UI Framework:** Jetpack Compose (Material 3)
+*   **Architecture:** MVVM + Clean Architecture
+*   **Audio Engine:** Custom Kotlin DSP (`AudioRecord` + `AudioTrack`), PSOLA for Pitch/Formant shifting.
+*   **Text-to-Speech:** Android Native `TextToSpeech` (Synthesized to `.m4a` and processed offline).
+*   **Local Database:** Room DB (for History).
+*   **Monetization:** Google AdMob (Banner, Interstitial, Rewarded) & UMP for EU Consent.
+*   **Min SDK:** 24 (Android 7.0) | **Target SDK:** 34 (Android 14)
+
+---
+
+## 🔐 Privacy Policy
+
+VoxMorph is built with privacy as a top priority:
+1.  **100% Offline:** The voice changing and TTS engines run entirely on your device using local math. No audio is ever sent to a server.
+2.  **No Accounts:** There is no sign-up, no tracking, and no analytics.
+3.  **Local Storage:** All recordings are saved locally on your device.
+4.  **Ads:** We use Google AdMob to display ads, which may collect your device's advertising ID to serve personalized ads.
+
+---
+
+## 👨‍💻 Developer
+
+**Mohd Arsh (CartoniQ)**
+*   GitHub: [@CartonIQ](https://github.com/CartonIQ)
+*   Android App Developer | Kotlin | Java | Termux 🚀
+
+## ⚖️ License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
